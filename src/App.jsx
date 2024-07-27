@@ -11,6 +11,7 @@ import NotFound from './pages/Shared/NotFound';
 import HomeLayout from './layout/HomeLayout';
 import ProductDash from './components/Admin/ProductDash';
 import UserDash from './components/Admin/UserDash';
+import OrderPage from './pages/User/OrderPage';
 import { UserProvider } from './components/UserContext'; // Ensure this path is correct
 
 const App = () => {
@@ -26,7 +27,8 @@ const App = () => {
           </Route>
 
           <Route element={<UserLayout />}>
-            <Route path='/dashboard' element={<UserDashboard />} />
+            <Route path='/dashboard'  element={<UserDashboard />} />
+            <Route path="/order/:product" element={<OrderPage/>} />
           </Route>
 
           <Route element={<AdminLayout />}>

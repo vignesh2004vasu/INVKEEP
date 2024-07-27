@@ -7,6 +7,7 @@ const Navbar = () => {
     { title: "Home", path: "/" },
     { title: "Login", path: "/login" },
     { title: "Register", path: "/register" },
+    { title: "Dash", path: "/dashboard" },
     { title: "Admin", path: "/admin/dashboard" },
   ];
 
