@@ -91,7 +91,7 @@ const ProductDash = () => {
         {products.map(product => (
           <TableRow key={product.id}>
             <TableCell className="font-medium">{product.id}</TableCell>
-            <TableCell>{product.product}</TableCell>
+            <TableCell>{product.productname}</TableCell>
             <TableCell>{product.category}</TableCell>
             <TableCell>{product.subcategory}</TableCell>
             <TableCell>{product.brand}</TableCell>
@@ -114,11 +114,11 @@ const ProductDash = () => {
                       </div>
                       <div className="grid gap-2">
                         <div className="grid grid-cols-3 items-center gap-4">
-                          <Label htmlFor="product">Product</Label>
+                          <Label htmlFor="productname">Product</Label>
                           <Input
-                            id="product"
-                            value={editedProduct.product}
-                            onChange={(e) => setEditedProduct({ ...editedProduct, product: e.target.value })}
+                            id="productname"
+                            value={editedProduct.productname}
+                            onChange={(e) => setEditedProduct({ ...editedProduct, productname: e.target.value })}
                             className="col-span-2 h-8"
                           />
                         </div>
@@ -206,16 +206,3 @@ const ProductDash = () => {
                         <Button onClick={handleSave}>Save</Button>
                       </div>
                     </div>
-                  </PopoverContent>
-                )}
-              </Popover>
-              <Button variant="outline" onClick={() => handleDelete(product.id)}>Delete</Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-export default ProductDash;
