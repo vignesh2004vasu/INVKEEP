@@ -74,7 +74,7 @@ const ProductDash = () => {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Product</TableHead>
+          <TableHead>Product Name</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Subcategory</TableHead>
           <TableHead>Brand</TableHead>
@@ -114,7 +114,7 @@ const ProductDash = () => {
                       </div>
                       <div className="grid gap-2">
                         <div className="grid grid-cols-3 items-center gap-4">
-                          <Label htmlFor="productname">Product</Label>
+                          <Label htmlFor="productname">Product Name</Label>
                           <Input
                             id="productname"
                             value={editedProduct.productname}
@@ -206,3 +206,16 @@ const ProductDash = () => {
                         <Button onClick={handleSave}>Save</Button>
                       </div>
                     </div>
+                  </PopoverContent>
+                )}
+              </Popover>
+              <Button variant="outline" onClick={() => handleDelete(product.id)}>Delete</Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default ProductDash;
