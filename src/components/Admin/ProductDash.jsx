@@ -16,7 +16,7 @@ const ProductDash = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchParams, setSearchParams] = useState({
+  const [filters, setFilters] = useState({
     category: '',
     subcategory: '',
     brand: '',
@@ -26,23 +26,25 @@ const ProductDash = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { category, subcategory, brand, type } = searchParams;
         const response = await axios.get('https://in-telli-ventory.onrender.com/products/filter', {
-          params: { category, subcategory, brand, type }
+          params: filters
         });
         setProducts(response.data);
+        setLoading(false);
       } catch (error) {
         setError('Failed to fetch products.');
-      } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [searchParams]);
+  }, [filters]);
 
-  const handleDropdownChange = (name, value) => {
-    setSearchParams({ ...searchParams, [name]: value });
+  const handleFilterChange = (name, value) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [name]: value
+    }));
   };
 
   if (loading) return <p>Loading...</p>;
@@ -50,65 +52,31 @@ const ProductDash = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-4 mb-4">
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <Label htmlFor="category">Category</Label>
-            <Select value={searchParams.category} onValueChange={(value) => handleDropdownChange('category', value)}>
-              <SelectTrigger placeholder="Select Category">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="Electronics">Electronics</SelectItem>
-                <SelectItem value="Fashion">Fashion</SelectItem>
-                <SelectItem value="Grocery">Grocery</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label htmlFor="subcategory">Subcategory</Label>
-            <Select value={searchParams.subcategory} onValueChange={(value) => handleDropdownChange('subcategory', value)}>
-              <SelectTrigger placeholder="Select Subcategory">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="Mobile">Mobile</SelectItem>
-                <SelectItem value="Laptop">Laptop</SelectItem>
-                <SelectItem value="Clothes">Clothes</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label htmlFor="brand">Brand</Label>
-            <Select value={searchParams.brand} onValueChange={(value) => handleDropdownChange('brand', value)}>
-              <SelectTrigger placeholder="Select Brand">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="Nivea">Nivea</SelectItem>
-                <SelectItem value="Samsung">Samsung</SelectItem>
-                <SelectItem value="Nike">Nike</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label htmlFor="type">Type</Label>
-            <Select value={searchParams.type} onValueChange={(value) => handleDropdownChange('type', value)}>
-              <SelectTrigger placeholder="Select Type">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="Electronics">Electronics</SelectItem>
-                <SelectItem value="Clothing">Clothing</SelectItem>
-                <SelectItem value="Food">Food</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+      <div className="flex flex-wrap gap-4 mb-4">
+        <FilterSelect
+          label="Category"
+          value={filters.category}
+          onChange={(value) => handleFilterChange('category', value)}
+          options={["Electronics", "Fashion", "Grocery"]}
+        />
+        <FilterSelect
+          label="Subcategory"
+          value={filters.subcategory}
+          onChange={(value) => handleFilterChange('subcategory', value)}
+          options={["Mobile", "Laptop", "Clothes"]}
+        />
+        <FilterSelect
+          label="Brand"
+          value={filters.brand}
+          onChange={(value) => handleFilterChange('brand', value)}
+          options={["Nivea", "Samsung", "Nike"]}
+        />
+        <FilterSelect
+          label="Type"
+          value={filters.type}
+          onChange={(value) => handleFilterChange('type', value)}
+          options={["Electronics", "Clothing", "Food"]}
+        />
       </div>
 
       <Table>
@@ -149,5 +117,22 @@ const ProductDash = () => {
     </div>
   );
 };
+
+const FilterSelect = ({ label, value, onChange, options }) => (
+  <div className="flex-1 min-w-[200px]">
+    <Label htmlFor={label.toLowerCase()}>{label}</Label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger placeholder={`Select ${label}`}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="">All</SelectItem>
+        {options.map(option => (
+          <SelectItem key={option} value={option}>{option}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
 
 export default ProductDash;
