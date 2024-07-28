@@ -89,12 +89,12 @@ export default function Home() {
         </Card>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <Card>
+        <Card className='rounded-xl'>
           <CardHeader>
             <CardTitle>Total Sales (Bar Chart)</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer width="100%" height={400} className=''>
               <BarChart data={salesData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />

@@ -5,7 +5,7 @@ const Leftbar = () => {
   const NavLinks = [
     { title: "Users", path: "/admin/users" },
     { title: "Products", path: "/admin/products" },
-    { title: "Logout", path: "/register" },
+    
     
   ];
   
@@ -17,7 +17,7 @@ const Leftbar = () => {
             <NavLink
               to={link.path}
               className={({ isActive }) =>
-                `text-lg font-semibold transition-colors duration-300 ${
+                `text-xl font-semibold transition-colors duration-300 ${
                   isActive ? "text-yellow-300" : "text-gray-300"
                 } hover:text-yellow-400`
               }

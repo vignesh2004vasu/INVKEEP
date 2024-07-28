@@ -13,6 +13,7 @@ import ProductDash from '@/components/Admin/ProductDash';
 import UserDash from './components/Admin/UserDash';
 import OrderPage from './pages/User/OrderPage';
 import { UserProvider } from './components/UserContext'; // Ensure this path is correct
+import ProtectedRoute from './ProtectedRoute'; // Adjust the path as needed
 
 const App = () => {
   return (
@@ -27,14 +28,42 @@ const App = () => {
           </Route>
 
           <Route element={<UserLayout />}>
-            <Route path='/dashboard'  element={<Home />} />
-            <Route path="/order/:product" element={<OrderPage/>} />
+            <Route
+              path='/dashboard'
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/order/:product" element={<OrderPage />} />
           </Route>
 
           <Route element={<AdminLayout />}>
-            <Route path='/admin/dashboard' element={<AdminDashboard />} />
-            <Route path='/admin/users' element={<UserDash />} />
-           <Route path='/admin/products' element={<ProductDash/>}/>
+            <Route
+              path='/admin/dashboard'
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin/users'
+              element={
+                <ProtectedRoute>
+                  <UserDash />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin/products'
+              element={
+                <ProtectedRoute>
+                  <ProductDash />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </UserProvider>

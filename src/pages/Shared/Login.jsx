@@ -33,9 +33,10 @@ const Login = () => {
         firstName: response.data.firstname,
         lastName: response.data.lastname,
         email: response.data.email,
+        role: response.data.role, // Assuming the response includes the user's role
       });
 
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error.response.data);
       setError(error.response.data || "An error occurred");
