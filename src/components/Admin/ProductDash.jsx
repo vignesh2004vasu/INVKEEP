@@ -9,16 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from '@/components/ui/select';
 
 const ProductDash = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [editedProduct, setEditedProduct] = useState({});
   const [searchParams, setSearchParams] = useState({
     category: '',
     subcategory: '',
@@ -30,7 +27,7 @@ const ProductDash = () => {
     const fetchProducts = async () => {
       try {
         const { category, subcategory, brand, type } = searchParams;
-        const response = await axios.get('https://in-telli-ventory.onrender.com/products', {
+        const response = await axios.get('https://in-telli-ventory.onrender.com/products/filter', {
           params: { category, subcategory, brand, type }
         });
         setProducts(response.data);
@@ -44,32 +41,8 @@ const ProductDash = () => {
     fetchProducts();
   }, [searchParams]);
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`https://in-telli-ventory.onrender.com/products/${id}`);
-      setProducts(products.filter(product => product.id !== id));
-    } catch (error) {
-      setError('Failed to delete product.');
-    }
-  };
-
-  const handleEdit = (product) => {
-    setEditingProduct(product);
-    setEditedProduct(product);
-  };
-
-  const handleSave = async () => {
-    try {
-      await axios.put(`https://in-telli-ventory.onrender.com/products/${editingProduct.id}`, editedProduct);
-      setProducts(products.map(product => (product.id === editingProduct.id ? editedProduct : product)));
-      setEditingProduct(null);
-    } catch (error) {
-      setError('Failed to update product.');
-    }
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+  const handleDropdownChange = (name, value) => {
+    setSearchParams({ ...searchParams, [name]: value });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -81,39 +54,59 @@ const ProductDash = () => {
         <div className="flex gap-4">
           <div className="flex-1">
             <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
-              name="category"
-              value={searchParams.category}
-              onChange={handleSearchChange}
-            />
+            <Select value={searchParams.category} onValueChange={(value) => handleDropdownChange('category', value)}>
+              <SelectTrigger placeholder="Select Category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All</SelectItem>
+                <SelectItem value="Electronics">Electronics</SelectItem>
+                <SelectItem value="Fashion">Fashion</SelectItem>
+                <SelectItem value="Grocery">Grocery</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex-1">
             <Label htmlFor="subcategory">Subcategory</Label>
-            <Input
-              id="subcategory"
-              name="subcategory"
-              value={searchParams.subcategory}
-              onChange={handleSearchChange}
-            />
+            <Select value={searchParams.subcategory} onValueChange={(value) => handleDropdownChange('subcategory', value)}>
+              <SelectTrigger placeholder="Select Subcategory">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All</SelectItem>
+                <SelectItem value="Mobile">Mobile</SelectItem>
+                <SelectItem value="Laptop">Laptop</SelectItem>
+                <SelectItem value="Clothes">Clothes</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex-1">
             <Label htmlFor="brand">Brand</Label>
-            <Input
-              id="brand"
-              name="brand"
-              value={searchParams.brand}
-              onChange={handleSearchChange}
-            />
+            <Select value={searchParams.brand} onValueChange={(value) => handleDropdownChange('brand', value)}>
+              <SelectTrigger placeholder="Select Brand">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All</SelectItem>
+                <SelectItem value="Nivea">Nivea</SelectItem>
+                <SelectItem value="Samsung">Samsung</SelectItem>
+                <SelectItem value="Nike">Nike</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex-1">
             <Label htmlFor="type">Type</Label>
-            <Input
-              id="type"
-              name="type"
-              value={searchParams.type}
-              onChange={handleSearchChange}
-            />
+            <Select value={searchParams.type} onValueChange={(value) => handleDropdownChange('type', value)}>
+              <SelectTrigger placeholder="Select Type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All</SelectItem>
+                <SelectItem value="Electronics">Electronics</SelectItem>
+                <SelectItem value="Clothing">Clothing</SelectItem>
+                <SelectItem value="Food">Food</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
