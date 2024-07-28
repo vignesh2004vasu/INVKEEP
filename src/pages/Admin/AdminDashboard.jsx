@@ -20,11 +20,11 @@ const AdminDashboard = () => {
     return (
         <>
         <div className="w-full">
-      <section className={`flex flex-col md:flex-row h-96 ${getTextColor()} ${getBackgroundColor(0)}`}>
+      <section className={`flex flex-col md:flex-row h-screen ${getTextColor()} ${getBackgroundColor(0)}`}>
+        <div className="md:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${image1})` }}></div>
         <div className="md:w-1/2 flex items-center justify-center p-10">
           <h1 className="text-4xl md:text-6xl">Welcome to Admin Dashboard</h1>
         </div>
-        <div className="md:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${image1})` }}></div>
       </section>
       </div>
         

@@ -34,7 +34,7 @@ const ProductDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table>
+    <Table className='mt-16'>
       <TableCaption>Product List</TableCaption>
       <TableHeader>
         <TableRow>
