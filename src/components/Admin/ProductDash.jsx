@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   TableBody,
@@ -8,31 +8,41 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
-import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectContent,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const ProductDash = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
-    category: '',
-    subcategory: '',
-    brand: '',
-    type: '',
+    category: "",
+    subcategory: "",
+    brand: "",
+    type: "",
   });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://in-telli-ventory.onrender.com/products/filter', {
-          params: filters
-        });
+        const response = await axios.get(
+          "https://in-telli-ventory.onrender.com/products/filter",
+          {
+            params: filters,
+          }
+        );
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
-        setError('Failed to fetch products.');
+        setError("Failed to fetch products.");
         setLoading(false);
       }
     };
@@ -41,10 +51,19 @@ const ProductDash = () => {
   }, [filters]);
 
   const handleFilterChange = (name, value) => {
-    setFilters(prevFilters => ({
+    setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: value
+      [name]: value,
     }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      category: "",
+      subcategory: "",
+      brand: "",
+      type: "",
+    });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -56,27 +75,38 @@ const ProductDash = () => {
         <FilterSelect
           label="Category"
           value={filters.category}
-          onChange={(value) => handleFilterChange('category', value)}
+          onChange={(value) => handleFilterChange("category", value)}
           options={["Electronics", "Fashion", "Grocery"]}
         />
         <FilterSelect
           label="Subcategory"
           value={filters.subcategory}
-          onChange={(value) => handleFilterChange('subcategory', value)}
+          onChange={(value) => handleFilterChange("subcategory", value)}
           options={["Mobile", "Laptop", "Clothes"]}
         />
         <FilterSelect
           label="Brand"
           value={filters.brand}
-          onChange={(value) => handleFilterChange('brand', value)}
+          onChange={(value) => handleFilterChange("brand", value)}
           options={["Nivea", "Samsung", "Nike"]}
         />
         <FilterSelect
           label="Type"
           value={filters.type}
-          onChange={(value) => handleFilterChange('type', value)}
+          onChange={(value) => handleFilterChange("type", value)}
           options={["Electronics", "Clothing", "Food"]}
         />
+      </div>
+
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <strong>Active Filters:</strong>{" "}
+          {Object.entries(filters)
+            .filter(([_, value]) => value)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(", ") || "None"}
+        </div>
+        <Button onClick={clearFilters}>Clear Filters</Button>
       </div>
 
       <Table>
@@ -97,7 +127,7 @@ const ProductDash = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map(product => (
+          {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.id}</TableCell>
               <TableCell>{product.productname}</TableCell>
@@ -122,13 +152,15 @@ const FilterSelect = ({ label, value, onChange, options }) => (
   <div className="flex-1 min-w-[200px]">
     <Label htmlFor={label.toLowerCase()}>{label}</Label>
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger placeholder={`Select ${label}`}>
+      <SelectTrigger id={label.toLowerCase()} placeholder={`Select ${label}`}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="">All</SelectItem>
-        {options.map(option => (
-          <SelectItem key={option} value={option}>{option}</SelectItem>
+        {options.map((option) => (
+          <SelectItem key={option} value={option}>
+            {option}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>
