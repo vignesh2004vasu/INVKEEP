@@ -3,6 +3,7 @@
 import { useUser } from '@/components/UserContext'; // Adjust path as needed
 import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, ComposedChart } from "recharts"
+import { useSpring, animated } from '@react-spring/web';
 import {
   Card,
   CardContent,
@@ -50,6 +51,15 @@ const inventoryData = [
   { name: "June", inventory: 189, sales: 480, revenue: 2181 },
 ]
 
+const AnimatedNumber = ({ number }) => {
+  const { number: animatedNumber } = useSpring({
+    from: { number: 0 },
+    to: { number },
+    config: { duration: 1000 }
+  });
+  return <animated.span>{animatedNumber.to(n => n.toFixed(0))}</animated.span>
+};
+
 export default function Home() {
   const { user } = useUser();
 
@@ -68,7 +78,7 @@ export default function Home() {
             <CardTitle>Number of Products</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{numberOfProducts}</p>
+            <p className="text-2xl font-bold"><AnimatedNumber number={numberOfProducts} /></p>
           </CardContent>
         </Card>
         <Card>
@@ -76,7 +86,7 @@ export default function Home() {
             <CardTitle>Number of Sales</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{numberOfSales}</p>
+            <p className="text-2xl font-bold"><AnimatedNumber number={numberOfSales} /></p>
           </CardContent>
         </Card>
         <Card>
@@ -84,7 +94,7 @@ export default function Home() {
             <CardTitle>Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">${totalRevenue}</p>
+            <p className="text-2xl font-bold">$<AnimatedNumber number={totalRevenue} /></p>
           </CardContent>
         </Card>
       </div>
