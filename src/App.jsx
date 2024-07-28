@@ -9,7 +9,7 @@ import AdminLayout from './layout/AdminLayout';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import NotFound from './pages/Shared/NotFound';
 import HomeLayout from './layout/HomeLayout';
-import ProductDash from './components/Admin/ProductDash';
+import ProductDash from '@/components/Admin/ProductDash';
 import UserDash from './components/Admin/UserDash';
 import OrderPage from './pages/User/OrderPage';
 import { UserProvider } from './components/UserContext'; // Ensure this path is correct
@@ -20,21 +20,21 @@ const App = () => {
       <UserProvider>
         <Routes>
           <Route element={<HomeLayout />}>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<UserDashboard />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='*' element={<NotFound />} />
           </Route>
 
           <Route element={<UserLayout />}>
-            <Route path='/dashboard'  element={<UserDashboard />} />
+            <Route path='/dashboard'  element={<Home />} />
             <Route path="/order/:product" element={<OrderPage/>} />
           </Route>
 
           <Route element={<AdminLayout />}>
             <Route path='/admin/dashboard' element={<AdminDashboard />} />
             <Route path='/admin/users' element={<UserDash />} />
-            <Route path='/admin/products' element={<ProductDash />} />
+           <Route path='/admin/products' element={<ProductDash/>}/>
           </Route>
         </Routes>
       </UserProvider>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Table,
   TableBody,
@@ -8,163 +8,68 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/table';
 
 const ProductDash = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({
-    category: "",
-    subcategory: "",
-    brand: "",
-    type: "",
-  });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          "https://in-telli-ventory.onrender.com/products/filter",
-          {
-            params: filters,
-          }
-        );
+        const response = await axios.get('https://in-telli-ventory.onrender.com/products');
         setProducts(response.data);
-        setLoading(false);
       } catch (error) {
-        setError("Failed to fetch products.");
+        setError('Failed to fetch products.');
+      } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [filters]);
-
-  const handleFilterChange = (name, value) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      category: "",
-      subcategory: "",
-      brand: "",
-      type: "",
-    });
-  };
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-4 mb-4">
-        <FilterSelect
-          label="Category"
-          value={filters.category}
-          onChange={(value) => handleFilterChange("category", value)}
-          options={["Electronics", "Fashion", "Grocery"]}
-        />
-        <FilterSelect
-          label="Subcategory"
-          value={filters.subcategory}
-          onChange={(value) => handleFilterChange("subcategory", value)}
-          options={["Mobile", "Laptop", "Clothes"]}
-        />
-        <FilterSelect
-          label="Brand"
-          value={filters.brand}
-          onChange={(value) => handleFilterChange("brand", value)}
-          options={["Nivea", "Samsung", "Nike"]}
-        />
-        <FilterSelect
-          label="Type"
-          value={filters.type}
-          onChange={(value) => handleFilterChange("type", value)}
-          options={["Electronics", "Clothing", "Food"]}
-        />
-      </div>
-
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <strong>Active Filters:</strong>{" "}
-          {Object.entries(filters)
-            .filter(([_, value]) => value)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ") || "None"}
-        </div>
-        <Button onClick={clearFilters}>Clear Filters</Button>
-      </div>
-
-      <Table>
-        <TableCaption>Product List</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Product Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Subcategory</TableHead>
-            <TableHead>Brand</TableHead>
-            <TableHead>Sale Price</TableHead>
-            <TableHead>Market Price</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Rating</TableHead>
-            <TableHead>Purchases</TableHead>
-            <TableHead>Stock</TableHead>
+    <Table>
+      <TableCaption>Product List</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead>Product Name</TableHead>
+          <TableHead>Category</TableHead>
+          <TableHead>Subcategory</TableHead>
+          <TableHead>Brand</TableHead>
+          <TableHead>Sale Price</TableHead>
+          <TableHead>Market Price</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead>Rating</TableHead>
+          <TableHead>Purchases</TableHead>
+          <TableHead>Stock</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {products.map(product => (
+          <TableRow key={product.id}>
+            <TableCell className="font-medium">{product.id}</TableCell>
+            <TableCell>{product.productname}</TableCell>
+            <TableCell>{product.category}</TableCell>
+            <TableCell>{product.subcategory}</TableCell>
+            <TableCell>{product.brand}</TableCell>
+            <TableCell>{product.saleprice}</TableCell>
+            <TableCell>{product.marketprice}</TableCell>
+            <TableCell>{product.type}</TableCell>
+            <TableCell>{product.rating}</TableCell>
+            <TableCell>{product.purchases}</TableCell>
+            <TableCell>{product.stock}</TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell className="font-medium">{product.id}</TableCell>
-              <TableCell>{product.productname}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>{product.subcategory}</TableCell>
-              <TableCell>{product.brand}</TableCell>
-              <TableCell>{product.saleprice}</TableCell>
-              <TableCell>{product.marketprice}</TableCell>
-              <TableCell>{product.type}</TableCell>
-              <TableCell>{product.rating}</TableCell>
-              <TableCell>{product.purchases}</TableCell>
-              <TableCell>{product.stock}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
-
-const FilterSelect = ({ label, value, onChange, options }) => (
-  <div className="flex-1 min-w-[200px]">
-    <Label htmlFor={label.toLowerCase()}>{label}</Label>
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger id={label.toLowerCase()} placeholder={`Select ${label}`}>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="">All</SelectItem>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-);
 
 export default ProductDash;
