@@ -5,6 +5,10 @@ const Leftbar = () => {
   const NavLinks = [
     { title: "Users", path: "/admin/users" },
     { title: "Products", path: "/admin/products" },
+    { title: "Sales", path: "/admin/sales" },
+    { title: "Supplier", path: "/admin/suppliers" },
+    { title: "Review", path: "/admin/reviews" },
+    { title: "Purchase", path: "/admin/purchases" },
     
     
   ];

@@ -34,37 +34,31 @@ const ProductDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16'>
+    <Table className='mt-16 text-xl' >
       <TableCaption>Product List</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
           <TableHead>Product Name</TableHead>
           <TableHead>Category</TableHead>
-          <TableHead>Subcategory</TableHead>
-          <TableHead>Brand</TableHead>
           <TableHead>Sale Price</TableHead>
-          <TableHead>Market Price</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Rating</TableHead>
-          <TableHead>Purchases</TableHead>
-          <TableHead>Stock</TableHead>
+          <TableHead>Cost Price</TableHead>
+          <TableHead>Stock Level</TableHead>
+          <TableHead>Reorder Level</TableHead>
+          <TableHead>Supplier</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {products.map(product => (
-          <TableRow key={product.id}>
-            <TableCell className="font-medium">{product.id}</TableCell>
-            <TableCell>{product.productname}</TableCell>
+          <TableRow key={product.productId}>
+            <TableCell className="font-medium">{product.productId}</TableCell>
+            <TableCell>{product.productName}</TableCell>
             <TableCell>{product.category}</TableCell>
-            <TableCell>{product.subcategory}</TableCell>
-            <TableCell>{product.brand}</TableCell>
-            <TableCell>{product.saleprice}</TableCell>
-            <TableCell>{product.marketprice}</TableCell>
-            <TableCell>{product.type}</TableCell>
-            <TableCell>{product.rating}</TableCell>
-            <TableCell>{product.purchases}</TableCell>
-            <TableCell>{product.stock}</TableCell>
+            <TableCell>{product.price}</TableCell>
+            <TableCell>{product.cost}</TableCell>
+            <TableCell>{product.stockLevel}</TableCell>
+            <TableCell>{product.reorderLevel}</TableCell>
+            <TableCell>{product.supplier.supplierName}</TableCell>
           </TableRow>
         ))}
       </TableBody>

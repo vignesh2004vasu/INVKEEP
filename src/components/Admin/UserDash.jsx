@@ -69,7 +69,7 @@ const UserDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16'>
+    <Table className='mt-16 text-xl'>
       <TableCaption>User List</TableCaption>
       <TableHeader>
         <TableRow>
@@ -83,20 +83,20 @@ const UserDash = () => {
       <TableBody>
         {users.map(user => (
           <TableRow key={user.id}>
-            <TableCell className="font-medium">{user.id}</TableCell>
+           <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.firstname}</TableCell>
             <TableCell>{user.lastname}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" onClick={() => handleEdit(user)}>Edit</Button>
+                  <Button variant="outline" className='text-lg' onClick={() => handleEdit(user)}>Edit</Button>
                 </PopoverTrigger>
                 {editingUser && editingUser.id === user.id && (
                   <PopoverContent className="w-80">
                     <div className="grid gap-4">
                       <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Edit User</h4>
+                        <h4 className="font-medium leading-none ">Edit User</h4>
                       </div>
                       <div className="grid gap-2">
                         <div className="grid grid-cols-3 items-center gap-4">
@@ -132,7 +132,7 @@ const UserDash = () => {
                   </PopoverContent>
                 )}
               </Popover>
-              <Button variant="outline" onClick={() => handleDelete(user.id)}>Delete</Button>
+              <Button variant="outline" className='text-lg' onClick={() => handleDelete(user.id)}>Delete</Button>
             </TableCell>
           </TableRow>
         ))}
