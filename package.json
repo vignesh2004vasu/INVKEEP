@@ -20,6 +20,7 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "deep-chat-react": "^2.0.1",
     "framer-motion": "^11.3.9",
     "lucide-react": "^0.414.0",
     "radix": "^0.0.0",
