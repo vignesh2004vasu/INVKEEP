@@ -9,6 +9,7 @@ const Leftbar = () => {
     { title: "Supplier", path: "/admin/suppliers" },
     { title: "Review", path: "/admin/reviews" },
     { title: "Purchase", path: "/admin/purchases" },
+    { title: "Bonk", path: "/admin/bonk" },
     
     
   ];

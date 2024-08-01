@@ -18,16 +18,23 @@ import { UserProvider } from "./components/UserContext"; // Ensure this path is 
 import ProtectedRoute from "./ProtectedRoute"; // Adjust the path as needed
 import ReviewDash from "./components/Admin/ReviewDash";
 import PurchaseDash from "./components/Admin/PurchaseDash";
+import { Client } from "@gradio/client";
+import { useEffect } from "react";
+import SalesDash from "./components/Admin/SalesDash";
 
 const App = () => {
+ 
+
   return (
     <BrowserRouter>
       <UserProvider>
         <Routes>
           <Route element={<HomeLayout />}>
             <Route path="/" element={<UserDashboard />} />
+
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
             <Route path="*" element={<NotFound />} />
           </Route>
 
@@ -97,7 +104,15 @@ const App = () => {
               path="/admin/purchases"
               element={
                 <ProtectedRoute>
-                  <PurchaseDash/>
+                  <PurchaseDash />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/bonk"
+              element={
+                <ProtectedRoute>
+                  <SalesDash/>
                 </ProtectedRoute>
               }
             />

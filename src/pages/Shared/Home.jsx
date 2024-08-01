@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/components/UserContext";
+
 import {
   Bar,
   BarChart,
@@ -48,6 +49,23 @@ const AnimatedNumber = ({ number }) => {
 
 export default function Home() {
   const { user } = useUser();
+
+useEffect(()=>{
+
+  const fetchData= async ()=>
+  {
+    const client = await Client.connect("YashwanthSC/Sentina");
+    const result = await client.predict("/sentiment_analysis", { });
+    
+    console.log(result.data);
+
+  }
+
+  fetchData();
+
+},[]);
+
+
 
 
   return (
