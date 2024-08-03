@@ -1,11 +1,28 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Label, Pie, PieChart, Sector } from "recharts"
+import React from "react";
+import { Label, Pie, PieChart, Sector } from "recharts";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const desktopData = [
   { month: "january", desktop: 186, fill: "var(--color-january)" },
@@ -13,7 +30,7 @@ const desktopData = [
   { month: "march", desktop: 237, fill: "var(--color-march)" },
   { month: "april", desktop: 173, fill: "var(--color-april)" },
   { month: "may", desktop: 209, fill: "var(--color-may)" },
-]
+];
 
 const chartConfig = {
   visitors: {
@@ -45,17 +62,17 @@ const chartConfig = {
     label: "May",
     color: "hsl(var(--chart-5))",
   },
-}
+};
 
-export default function PieNew() {
-  const id = "pie-interactive"
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month)
+export default function PieChartDash() {
+  const id = "pie-interactive";
+  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
 
   const activeIndex = React.useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
     [activeMonth]
-  )
-  const months = React.useMemo(() => desktopData.map((item) => item.month), [])
+  );
+  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
 
   return (
     <Card data-chart={id} className="flex flex-col">
@@ -74,10 +91,10 @@ export default function PieNew() {
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
             {months.map((key) => {
-              const config = chartConfig[key]
+              const config = chartConfig[key];
 
               if (!config) {
-                return null
+                return null;
               }
 
               return (
@@ -96,7 +113,7 @@ export default function PieNew() {
                     {config.label}
                   </div>
                 </SelectItem>
-              )
+              );
             })}
           </SelectContent>
         </Select>
@@ -155,7 +172,7 @@ export default function PieNew() {
                           Visitors
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -164,5 +181,5 @@ export default function PieNew() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

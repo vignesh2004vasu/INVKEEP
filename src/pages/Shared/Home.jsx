@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/components/UserContext";
+import { Client } from "@gradio/client";
 
 import {
   Bar,
@@ -20,9 +21,10 @@ import {
 import { useSpring, animated } from "@react-spring/web";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadialChart } from "./RadialChart";
-import  PieNew  from "../Shared/Pie";
+import PieChartDash from "./Pie";
 import BarNew from "./BarNew";
 import LineNew from "./LineNew";
+import Predict from "./Predict";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -32,41 +34,34 @@ const fetchData = async (url) => {
   return data;
 };
 
-
-const numberOfProducts = 120
-const numberOfSales = 300
-const totalRevenue = 15000
+const numberOfProducts = 120;
+const numberOfSales = 300;
+const totalRevenue = 15000;
 
 const AnimatedNumber = ({ number }) => {
   const { number: animatedNumber } = useSpring({
     from: { number: 0 },
     to: { number },
-    config: { duration: 1000 }
+    config: { duration: 1000 },
   });
-  return <animated.span>{animatedNumber.to(n => n.toFixed(0))}</animated.span>
+  return (
+    <animated.span>{animatedNumber.to((n) => n.toFixed(0))}</animated.span>
+  );
 };
-
 
 export default function Home() {
   const { user } = useUser();
 
-useEffect(()=>{
+  useEffect(() => {
+    const fetchData = async () => {
+      const client = await Client.connect("YashwanthSC/Sentina");
+      const result = await client.predict("/sentiment_analysis", {});
 
-  const fetchData= async ()=>
-  {
-    const client = await Client.connect("YashwanthSC/Sentina");
-    const result = await client.predict("/sentiment_analysis", { });
-    
-    console.log(result.data);
+      console.log(result.data);
+    };
 
-  }
-
-  fetchData();
-
-},[]);
-
-
-
+    fetchData();
+  }, []);
 
   return (
     <div className="container mx-auto py-8 mt-16">
@@ -120,7 +115,7 @@ useEffect(()=>{
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={500}>
-              <BarNew/>
+              <BarNew />
             </ResponsiveContainer>
           </CardContent>
         </Card>
@@ -130,7 +125,7 @@ useEffect(()=>{
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={400}>
-              <LineNew/>
+              <LineNew />
             </ResponsiveContainer>
           </CardContent>
         </Card>
@@ -142,7 +137,7 @@ useEffect(()=>{
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={400}>
-              <PieNew />
+              <PieChartDash/>
             </ResponsiveContainer>
           </CardContent>
         </Card>
@@ -156,7 +151,11 @@ useEffect(()=>{
             </ResponsiveContainer>
           </CardContent>
         </Card>
+        
       </div>
+            <ResponsiveContainer width="100%" height={400}>
+              <Predict />
+            </ResponsiveContainer>
     </div>
   );
 }
