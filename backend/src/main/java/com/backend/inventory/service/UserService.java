@@ -41,18 +41,19 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    // public User updateUser(long id, User user) {
+    public User updateUser(long id, User user) {
         
-    //     User existingUser = userRepository.findById(id).orElse(null);
-    //     existingUser.setFirstname(user.getFirstname());
-    //     existingUser.setLastname(user.getLastname());
-    //     existingUser.setEmail(user.getEmail());
-    //     existingUser.setPassword(user.getPassword());
+        User existingUser = userRepository.findById(id).orElse(null);
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setAddress(user.getAddress());
 
-    //     return userRepository.save(existingUser);
+        return userRepository.save(existingUser);
 
         
-    // }
+    }
 
     public String deleteById(long id) {
 

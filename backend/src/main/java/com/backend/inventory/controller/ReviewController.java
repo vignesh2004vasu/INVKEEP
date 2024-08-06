@@ -13,11 +13,17 @@ import com.backend.inventory.service.ReviewService;
 import com.backend.inventory.service.ProductService;
 import com.backend.inventory.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/reviews")
 @CrossOrigin("*")
+@Tag(name = "Review CRUD", description = "Endpoints for Review CRUD operation")
 public class ReviewController {
 
     @Autowired
@@ -57,6 +63,34 @@ public class ReviewController {
 
             Review createdReview = reviewService.addReview(review);
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
+        try {
+            Review updatedReview = reviewService.updateReview(id, reviewDTO);
+            if (updatedReview == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long id) {
+        try {
+            String result = reviewService.deleteReview(id);
+            if (result.contains("not found")) {
+                return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
