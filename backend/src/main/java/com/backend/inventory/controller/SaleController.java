@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.inventory.dto.SaleDTO;
 import com.backend.inventory.model.Product;
 import com.backend.inventory.model.Sale;
 import com.backend.inventory.model.User;
@@ -42,13 +43,13 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<Sale> createSale(@RequestBody Map<String, Object> saleData) {
+    public ResponseEntity<Sale> createSale(@RequestBody SaleDTO saleDTO) {
         try {
-            Long productId = ((Number) saleData.get("productId")).longValue();
-            Long userId = ((Number) saleData.get("userId")).longValue();
-            int quantity = (int) saleData.get("quantity");
-            double totalPrice = ((Number) saleData.get("totalPrice")).doubleValue();
-            Date saleDate = new SimpleDateFormat("yyyy-MM-dd").parse((String) saleData.get("saleDate"));
+            Long productId = saleDTO.getProductId();
+            Long userId = saleDTO.getUserId();
+            int quantity = saleDTO.getQuantity();
+            double totalPrice = saleDTO.getTotalPrice();
+            Date saleDate = new SimpleDateFormat("yyyy-MM-dd").parse(saleDTO.getSaleDate());
 
             Product product = productService.getProduct(productId);
             if (product == null) {
@@ -74,5 +75,6 @@ public class SaleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }
