@@ -19,7 +19,9 @@ const ProductDash = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axiosInstance.get("/products");
+        const response = await axios.get(
+          "https://in-telli-ventory.onrender.com/products"
+        );
         setProducts(response.data);
       } catch (error) {
         setError("Failed to fetch products.");

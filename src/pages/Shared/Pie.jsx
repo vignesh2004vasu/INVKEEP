@@ -1,8 +1,4 @@
-"use client";
-
-import React from "react";
-import { Label, Pie, PieChart, Sector } from "recharts";
-
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -23,100 +19,115 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const desktopData = [
-  { month: "january", desktop: 186, fill: "var(--color-january)" },
-  { month: "february", desktop: 305, fill: "var(--color-february)" },
-  { month: "march", desktop: 237, fill: "var(--color-march)" },
-  { month: "april", desktop: 173, fill: "var(--color-april)" },
-  { month: "may", desktop: 209, fill: "var(--color-may)" },
-];
+import { Client } from "@gradio/client";
+import { Label, Pie, PieChart, Sector } from "recharts";
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-  },
-  mobile: {
-    label: "Mobile",
-  },
-  january: {
-    label: "January",
-    color: "hsl(var(--chart-1))",
-  },
-  february: {
-    label: "February",
-    color: "hsl(var(--chart-2))",
-  },
-  march: {
-    label: "March",
-    color: "hsl(var(--chart-3))",
-  },
-  april: {
-    label: "April",
-    color: "hsl(var(--chart-4))",
-  },
-  may: {
-    label: "May",
-    color: "hsl(var(--chart-5))",
-  },
+  sentiment: { label: "Sentiment" },
+  Positive: { label: "Positive", color: "hsl(var(--chart-1))" },
+  Neutral: { label: "Neutral", color: "hsl(var(--chart-3))" },
+  Negative: { label: "Negative", color: "hsl(var(--chart-5))" },
 };
 
-export default function PieChartDash() {
+export function PieChartDash() {
   const id = "pie-interactive";
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
+  const [chartData, setChartData] = useState([]);
+  const [totalVisitors, setTotalVisitors] = useState(0);
+  const [activeSentiment, setActiveSentiment] = useState("Positive");
+  const [pieload, setPieload] = useState(true);
+  const [sentiRev, setSentiRev] = useState(0);
 
-  const activeIndex = React.useMemo(
-    () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth]
+  useEffect(() => {
+    const fetchSenti = async () => {
+      const client = await Client.connect("YashwanthSC/Sentina");
+      const result = await client.predict("/lambda", {});
+      const data = result.data[0];
+
+      const processedData = [
+        {
+          name: "Positive",
+          value: data.positive_percentage,
+          fill: "hsl(var(--chart-1))",
+        },
+        {
+          name: "Neutral",
+          value: data.neutral_percentage,
+          fill: "hsl(var(--chart-3))",
+        },
+        {
+          name: "Negative",
+          value: data.negative_percentage,
+          fill: "hsl(var(--chart-5))",
+        },
+      ];
+
+      setChartData(processedData);
+      setTotalVisitors(data.total_reviews);
+      setPieload(false);
+    };
+
+    fetchSenti();
+  }, []);
+
+  useEffect(() => {
+    const sentimentIndex = chartData.findIndex(
+      (item) => item.name === activeSentiment
+    );
+    if (sentimentIndex !== -1) {
+      setSentiRev(
+        Math.round((totalVisitors * chartData[sentimentIndex].value) / 100)
+      );
+    }
+  }, [activeSentiment, chartData, totalVisitors]);
+
+  const activeIndex = useMemo(
+    () => chartData.findIndex((item) => item.name === activeSentiment),
+    [activeSentiment, chartData]
   );
-  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
+  const sentiments = useMemo(
+    () => chartData.map((item) => item.name),
+    [chartData]
+  );
 
   return (
     <Card data-chart={id} className="flex flex-col">
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <CardTitle>Pie Chart - Interactive</CardTitle>
-          <CardDescription>January - June 2024</CardDescription>
+          <CardTitle>Sentiment Analysis</CardTitle>
+          <CardDescription>
+            Analysis of <span className="font-bold">{totalVisitors}</span>{" "}
+            Reviews
+          </CardDescription>
         </div>
-        <Select value={activeMonth} onValueChange={setActiveMonth}>
-          <SelectTrigger
-            className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
-            aria-label="Select a value"
-          >
-            <SelectValue placeholder="Select month" />
-          </SelectTrigger>
-          <SelectContent align="end" className="rounded-xl">
-            {months.map((key) => {
-              const config = chartConfig[key];
-
-              if (!config) {
-                return null;
-              }
-
-              return (
-                <SelectItem
-                  key={key}
-                  value={key}
-                  className="rounded-lg [&_span]:flex"
-                >
-                  <div className="flex items-center gap-2 text-xs">
-                    <span
-                      className="flex h-3 w-3 shrink-0 rounded-sm"
-                      style={{
-                        backgroundColor: `var(--color-${key})`,
-                      }}
-                    />
-                    {config.label}
-                  </div>
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
+        {!pieload ? (
+          <Select value={activeSentiment} onValueChange={setActiveSentiment}>
+            <SelectTrigger
+              className="ml-auto w-[160px] rounded-xl pl-2.5"
+              aria-label="Select a sentiment"
+            >
+              <SelectValue placeholder="Select sentiment" />
+            </SelectTrigger>
+            <SelectContent align="end" className="rounded-xl">
+              {sentiments.map((key) => {
+                const config = chartConfig[key];
+                return (
+                  <SelectItem key={key} value={key} className="rounded-lg">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span
+                        className="flex h-3 w-3 shrink-0 rounded-sm"
+                        style={{ backgroundColor: `var(--color-${key})` }}
+                      />
+                      {config?.label}
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        ) : (
+          <div></div>
+        )}
       </CardHeader>
       <CardContent className="flex flex-1 justify-center pb-0">
         <ChartContainer
@@ -124,60 +135,66 @@ export default function PieChartDash() {
           config={chartConfig}
           className="mx-auto aspect-square w-full max-w-[300px]"
         >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={desktopData}
-              dataKey="desktop"
-              nameKey="month"
-              innerRadius={60}
-              strokeWidth={5}
-              activeIndex={activeIndex}
-              activeShape={({ outerRadius = 0, ...props }) => (
-                <g>
-                  <Sector {...props} outerRadius={outerRadius + 10} />
-                  <Sector
-                    {...props}
-                    outerRadius={outerRadius + 25}
-                    innerRadius={outerRadius + 12}
-                  />
-                </g>
-              )}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+          {!pieload ? (
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={60}
+                strokeWidth={5}
+                activeIndex={activeIndex}
+                activeShape={({ outerRadius = 0, ...props }) => (
+                  <g>
+                    <Sector {...props} outerRadius={outerRadius + 10} />
+                    <Sector
+                      {...props}
+                      outerRadius={outerRadius + 25}
+                      innerRadius={outerRadius + 12}
+                    />
+                  </g>
+                )}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {desktopData[activeIndex].desktop.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Visitors
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-          </PieChart>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {sentiRev.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Reviews
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          ) : (
+            <div className="h-full w-full flex justify-center items-center">
+              Our AI is working out the sentiments...
+            </div>
+          )}
         </ChartContainer>
       </CardContent>
     </Card>

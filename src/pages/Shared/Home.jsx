@@ -5,23 +5,14 @@ import { useUser } from "@/components/UserContext";
 import { Client } from "@gradio/client";
 
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
+ 
   ResponsiveContainer,
-  Cell,
-  LineChart,
-  Line,
-  ComposedChart,
+  
 } from "recharts";
 import { useSpring, animated } from "@react-spring/web";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadialChart } from "./RadialChart";
-import PieChartDash from "./Pie";
+import {PieChartDash} from "./Pie";
 import BarNew from "./BarNew";
 import LineNew from "./LineNew";
 import Predict from "./Predict";

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,17 +10,51 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authService } from "@/services/api";
 
-export function AddUserDialog({ isOpen, onClose, onSave }) {
+export function AddUserDialog({ isOpen, onClose, onSave, user }) {
   const [userData, setUserData] = useState({
-    firstname: "",
-    lastname: "",
+    name: "",
     email: "",
+    phone: "",
+    address: "",
+    password: "",
   });
 
-  const handleSave = () => {
-    onSave(userData);
-    setUserData({ firstname: "", lastname: "", email: "" });
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        password: user.password || "",
+      });
+    } else {
+      setUserData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        password: "",
+      });
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    try {
+      await authService.register(
+        userData.name,
+        userData.email,
+        userData.phone,
+        userData.address,
+        userData.password
+      );
+      onSave(userData);
+    } catch (error) {
+      console.error("Failed to register user:", error);
+    }
+    setUserData({ name: "", email: "", phone: "", address: "", password: "" });
     onClose();
   };
 
@@ -28,34 +62,21 @@ export function AddUserDialog({ isOpen, onClose, onSave }) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add User</DialogTitle>
+          <DialogTitle>{user ? "Edit User" : "Add User"}</DialogTitle>
           <DialogDescription>
-            Enter the details of the new user here. Click save when you’re done.
+            Enter the details of the user here. Click save when you’re done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="firstname" className="text-right">
-              First Name
+            <Label htmlFor="name" className="text-right">
+              Full Name
             </Label>
             <Input
-              id="firstname"
-              value={userData.firstname}
+              id="name"
+              value={userData.name}
               onChange={(e) =>
-                setUserData({ ...userData, firstname: e.target.value })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="lastname" className="text-right">
-              Last Name
-            </Label>
-            <Input
-              id="lastname"
-              value={userData.lastname}
-              onChange={(e) =>
-                setUserData({ ...userData, lastname: e.target.value })
+                setUserData({ ...userData, name: e.target.value })
               }
               className="col-span-3"
             />
@@ -69,6 +90,46 @@ export function AddUserDialog({ isOpen, onClose, onSave }) {
               value={userData.email}
               onChange={(e) =>
                 setUserData({ ...userData, email: e.target.value })
+              }
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="phone" className="text-right">
+              Phone
+            </Label>
+            <Input
+              id="phone"
+              value={userData.phone}
+              onChange={(e) =>
+                setUserData({ ...userData, phone: e.target.value })
+              }
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="address" className="text-right">
+              Address
+            </Label>
+            <Input
+              id="address"
+              value={userData.address}
+              onChange={(e) =>
+                setUserData({ ...userData, address: e.target.value })
+              }
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="password" className="text-right">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              value={userData.password}
+              onChange={(e) =>
+                setUserData({ ...userData, password: e.target.value })
               }
               className="col-span-3"
             />

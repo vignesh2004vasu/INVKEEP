@@ -9,11 +9,9 @@ const Leftbar = () => {
     { title: "Supplier", path: "/admin/suppliers" },
     { title: "Review", path: "/admin/reviews" },
     { title: "Purchase", path: "/admin/purchases" },
-    { title: "Bonk", path: "/admin/bonk" },
-    
-    
+    { title: "+/-", path: "/admin/bonk" },
   ];
-  
+
   return (
     <div className="h-70 z-10 w-52 flex justify-center items-center flex-col bg-gray-800 pt-10">
       <div className="h-5/6 w-full flex flex-col justify-start items-center mt-10">
@@ -32,9 +30,7 @@ const Leftbar = () => {
           </li>
         ))}
       </div>
-      <div className="h-1/6 w-full flex flex-col justify-center items-center">
-       
-      </div>
+      <div className="h-1/6 w-full flex flex-col justify-center items-center"></div>
     </div>
   );
 };

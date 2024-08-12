@@ -51,72 +51,72 @@ const App = () => {
           </Route>
 
           <Route element={<AdminLayout />}>
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/users"
-              element={
-                <ProtectedRoute>
-                  <UserDash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/products"
-              element={
-                <ProtectedRoute>
-                  <ProductDash />
-                </ProtectedRoute>
-              }
-            />
+  <Route
+    path="/admin/dashboard"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <AdminDashboard />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/users"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <UserDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/products"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <ProductDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/sales"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <SaleDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/suppliers"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <SupplierDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/reviews"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <ReviewDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/purchases"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <PurchaseDash />
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/admin/bonk"
+    element={
+      <ProtectedRoute requiredRole="ADMIN">
+        <SalesDash />
+      </ProtectedRoute>
+    }
+  />
+</Route>
 
-            <Route
-              path="/admin/sales"
-              element={
-                <ProtectedRoute>
-                  <SaleDash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/suppliers"
-              element={
-                <ProtectedRoute>
-                  <SupplierDash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/reviews"
-              element={
-                <ProtectedRoute>
-                  <ReviewDash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/purchases"
-              element={
-                <ProtectedRoute>
-                  <PurchaseDash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/bonk"
-              element={
-                <ProtectedRoute>
-                  <SalesDash/>
-                </ProtectedRoute>
-              }
-            />
-          </Route>
         </Routes>
       </UserProvider>
     </BrowserRouter>
