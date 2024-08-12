@@ -1,22 +1,34 @@
 import { UserData } from "./api";
-import { authService } from "./auth"
+import { authService } from "./auth";
 
-
-const email = authService.getUserEmail();
 const getUserData = async () => {
-    const res = await UserData(email)
-    console.log('ww')
-    return res?.data;
+    try {
+        const email = authService.getUserEmail();
+        if (!email) throw new Error('No user email found');
 
-}
+        const response = await UserData(email);
+        return response?.data;
+    } catch (error) {
+        throw new Error('Failed to fetch user data: ' + (error.message || 'An error occurred'));
+    }
+};
+
 const getUsername = async () => {
-    const res = await getUserData()
-    return res?.name;
-}
-const getUserID = async () => {
-    const res = await getUserData()
-    console.log(res?.id)
-    return res?.id;
-}
+    try {
+        const userData = await getUserData();
+        return userData?.name;
+    } catch (error) {
+        throw new Error('Failed to get username: ' + (error.message || 'An error occurred'));
+    }
+};
 
-export const User = { getUsername, getUserData, getUserID }
+const getUserID = async () => {
+    try {
+        const userData = await getUserData();
+        return userData?.id;
+    } catch (error) {
+        throw new Error('Failed to get user ID: ' + (error.message || 'An error occurred'));
+    }
+};
+
+export const User = { getUsername, getUserData, getUserID };

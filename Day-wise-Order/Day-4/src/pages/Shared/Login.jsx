@@ -26,7 +26,10 @@ const Login = () => {
     try {
       const response = await axios.post(
         "https://in-telli-ventory.onrender.com/users/login",
-        { email, password }
+        {
+          email,
+          password,
+        }
       );
       console.log("Login successful:", response.data);
 

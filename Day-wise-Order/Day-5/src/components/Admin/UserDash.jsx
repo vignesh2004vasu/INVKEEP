@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -29,10 +29,12 @@ const UserDash = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://in-telli-ventory.onrender.com/users');
+        const response = await axios.get(
+          "https://in-telli-ventory.onrender.com/users"
+        );
         setUsers(response.data);
       } catch (error) {
-        setError('Failed to fetch users.');
+        setError("Failed to fetch users.");
       } finally {
         setLoading(false);
       }
@@ -44,9 +46,9 @@ const UserDash = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://in-telli-ventory.onrender.com/users/${id}`);
-      setUsers(users.filter(user => user.id !== id));
+      setUsers(users.filter((user) => user.id !== id));
     } catch (error) {
-      setError('Failed to delete user.');
+      setError("Failed to delete user.");
     }
   };
 
@@ -57,11 +59,16 @@ const UserDash = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://in-telli-ventory.onrender.com/users/${editingUser.id}`, editedUser);
-      setUsers(users.map(user => (user.id === editingUser.id ? editedUser : user)));
+      await axios.put(
+        `https://in-telli-ventory.onrender.com/users/${editingUser.id}`,
+        editedUser
+      );
+      setUsers(
+        users.map((user) => (user.id === editingUser.id ? editedUser : user))
+      );
       setEditingUser(null);
     } catch (error) {
-      setError('Failed to update user.');
+      setError("Failed to update user.");
     }
   };
 
@@ -69,7 +76,7 @@ const UserDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16 text-xl'>
+    <Table className="mt-16 text-xl">
       <TableCaption>User List</TableCaption>
       <TableHeader>
         <TableRow>
@@ -81,16 +88,22 @@ const UserDash = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map(user => (
+        {users.map((user) => (
           <TableRow key={user.id}>
-           <TableCell className="font-medium">{user.id}</TableCell>
+            <TableCell className="font-medium">{user.id}</TableCell>
             <TableCell>{user.firstname}</TableCell>
             <TableCell>{user.lastname}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className='text-lg' onClick={() => handleEdit(user)}>Edit</Button>
+                  <Button
+                    variant="outline"
+                    className="text-lg"
+                    onClick={() => handleEdit(user)}
+                  >
+                    Edit
+                  </Button>
                 </PopoverTrigger>
                 {editingUser && editingUser.id === user.id && (
                   <PopoverContent className="w-80">
@@ -104,7 +117,12 @@ const UserDash = () => {
                           <Input
                             id="firstname"
                             value={editedUser.firstname}
-                            onChange={(e) => setEditedUser({ ...editedUser, firstname: e.target.value })}
+                            onChange={(e) =>
+                              setEditedUser({
+                                ...editedUser,
+                                firstname: e.target.value,
+                              })
+                            }
                             className="col-span-2 h-8"
                           />
                         </div>
@@ -113,7 +131,12 @@ const UserDash = () => {
                           <Input
                             id="lastname"
                             value={editedUser.lastname}
-                            onChange={(e) => setEditedUser({ ...editedUser, lastname: e.target.value })}
+                            onChange={(e) =>
+                              setEditedUser({
+                                ...editedUser,
+                                lastname: e.target.value,
+                              })
+                            }
                             className="col-span-2 h-8"
                           />
                         </div>
@@ -122,7 +145,12 @@ const UserDash = () => {
                           <Input
                             id="email"
                             value={editedUser.email}
-                            onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                            onChange={(e) =>
+                              setEditedUser({
+                                ...editedUser,
+                                email: e.target.value,
+                              })
+                            }
                             className="col-span-2 h-8"
                           />
                         </div>
@@ -132,7 +160,13 @@ const UserDash = () => {
                   </PopoverContent>
                 )}
               </Popover>
-              <Button variant="outline" className='text-lg' onClick={() => handleDelete(user.id)}>Delete</Button>
+              <Button
+                variant="outline"
+                className="text-lg"
+                onClick={() => handleDelete(user.id)}
+              >
+                Delete
+              </Button>
             </TableCell>
           </TableRow>
         ))}

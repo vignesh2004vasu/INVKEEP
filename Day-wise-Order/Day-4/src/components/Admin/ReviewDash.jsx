@@ -55,8 +55,10 @@ const ReviewDash = () => {
             <TableCell>{review.product.productName}</TableCell>
             <TableCell>{review.user.firstname}</TableCell>
             <TableCell>{review.reviewText}</TableCell>
-            <TableCell>{new Date(review.reviewDate).toLocaleDateString()}</TableCell>
-            <TableCell>{review.sentimentScore}</TableCell> 
+            <TableCell>
+              {new Date(review.reviewDate).toLocaleDateString()}
+            </TableCell>
+            <TableCell>{review.sentimentScore}</TableCell>
           </TableRow>
         ))}
       </TableBody>

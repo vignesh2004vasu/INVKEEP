@@ -1,7 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -13,7 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../components/UserContext"; // Adjust path based on your project structure
+import { useUser } from "../../components/UserContext";
+import { authService } from "../../services/api";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,23 +24,21 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "https://in-telli-ventory.onrender.com/users/login",
-        { email, password }
-      );
-      console.log("Login successful:", response.data);
+      const token = await authService.login(email, password);
+      console.log("Login successful, token received:", token);
 
+      const decodedToken = jwtDecode(token);
+      
       setUser({
-        firstName: response.data.firstname,
-        lastName: response.data.lastname,
-        email: response.data.email,
-        role: response.data.role, // Assuming the response includes the user's role
+        email: decodedToken.sub, 
+        role: decodedToken.role,
+       
       });
 
       navigate("/dashboard");
     } catch (error) {
-      console.error("Login failed:", error.response.data);
-      setError(error.response.data || "An error occurred");
+      console.error("Login failed:", error.response?.data || error.message);
+      setError(error.response?.data || "An error occurred during login");
     }
   };
 

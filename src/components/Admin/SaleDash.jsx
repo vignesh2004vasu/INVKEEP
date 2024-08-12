@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 const SaleDash = () => {
   const [sales, setSales] = useState([]);
@@ -18,10 +18,10 @@ const SaleDash = () => {
   useEffect(() => {
     const fetchSales = async () => {
       try {
-        const response = await axios.get('https://in-telli-ventory.onrender.com/api/sales');
+        const response = await axios.get("https://in-telli-ventory.onrender.com/api/sales");
         setSales(response.data);
       } catch (error) {
-        setError('Failed to fetch products.');
+        setError("Failed to fetch products.");
       } finally {
         setLoading(false);
       }
@@ -34,7 +34,7 @@ const SaleDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16 text-xl'>
+    <Table className="mt-16 text-xl">
       <TableCaption>Sale List</TableCaption>
       <TableHeader>
         <TableRow>
@@ -44,17 +44,18 @@ const SaleDash = () => {
           <TableHead>Quantity</TableHead>
           <TableHead>Sale Date</TableHead>
           <TableHead>Customer Name</TableHead>
-        
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sales.map(sale => (
+        {sales.map((sale) => (
           <TableRow key={sale.saleId}>
             <TableCell className="font-medium">{sale.saleId}</TableCell>
             <TableCell>{sale.product.productName}</TableCell>
             <TableCell>{sale.totalPrice}</TableCell>
             <TableCell>{sale.quantity}</TableCell>
-            <TableCell>{new Date(sale.saleDate).toLocaleDateString()}</TableCell>
+            <TableCell>
+              {new Date(sale.saleDate).toLocaleDateString()}
+            </TableCell>
             <TableCell>{sale.user.firstname}</TableCell>
           </TableRow>
         ))}

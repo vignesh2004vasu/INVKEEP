@@ -1,16 +1,21 @@
-import { DeleteUserByID, getAllUsers } from "./api"
-
-
+import { DeleteUserByID, getAllUsers } from "./api";
 
 const getAllUsersData = async () => {
-    const res = await getAllUsers()
-    return res?.data;
+    try {
+        const response = await getAllUsers();
+        return response?.data;
+    } catch (error) {
+        throw new Error('Failed to fetch users: ' + (error.message || 'An error occurred'));
+    }
+};
 
-}
 const deleteUser = async (uid) => {
-    console.log(uid)
-    const res = await DeleteUserByID(uid);
-    return res?.data;
-}
+    try {
+        const response = await DeleteUserByID(uid);
+        return response?.data;
+    } catch (error) {
+        throw new Error('Failed to delete user: ' + (error.message || 'An error occurred'));
+    }
+};
 
-export const Admin = { getAllUsersData, deleteUser }
+export const Admin = { getAllUsersData, deleteUser };
