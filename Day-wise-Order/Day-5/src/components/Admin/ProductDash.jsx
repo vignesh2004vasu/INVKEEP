@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 const ProductDash = () => {
   const [products, setProducts] = useState([]);
@@ -18,10 +18,12 @@ const ProductDash = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://in-telli-ventory.onrender.com/products');
+        const response = await axios.get(
+          "https://in-telli-ventory.onrender.com/products"
+        );
         setProducts(response.data);
       } catch (error) {
-        setError('Failed to fetch products.');
+        setError("Failed to fetch products.");
       } finally {
         setLoading(false);
       }
@@ -34,7 +36,7 @@ const ProductDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16 text-xl' >
+    <Table className="mt-16 text-xl">
       <TableCaption>Product List</TableCaption>
       <TableHeader>
         <TableRow>
@@ -49,7 +51,7 @@ const ProductDash = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map(product => (
+        {products.map((product) => (
           <TableRow key={product.productId}>
             <TableCell className="font-medium">{product.productId}</TableCell>
             <TableCell>{product.productName}</TableCell>

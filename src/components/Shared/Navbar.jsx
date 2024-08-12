@@ -1,16 +1,22 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ModeToggle } from "../mode-toggle";
-import logoImage from "/src/assets/inventory-management.png"; // Adjust the path to your logo image
-import { useUser } from "@/components/UserContext"; // Adjust the path as needed
+import logoImage from "/src/assets/inventory-management.png";
+import { useUser } from "@/components/UserContext";
+import { authService } from "../../services/api"; // Import the authService
 
 const Navbar = () => {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null); // Clear the user state
-    navigate("/login"); // Redirect to the login page
+  const handleLogout = async () => {
+    try {
+      await authService.logout(); // Call the logout API
+      setUser(null); // Clear the user state
+      navigate("/login"); // Redirect to the login page
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const publicLinks = [

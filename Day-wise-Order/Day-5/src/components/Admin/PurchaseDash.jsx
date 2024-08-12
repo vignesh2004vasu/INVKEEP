@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 const PurchaseDash = () => {
   const [purchases, setPurchases] = useState([]);
@@ -18,10 +18,12 @@ const PurchaseDash = () => {
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        const response = await axios.get('https://in-telli-ventory.onrender.com/api/purchase-orders');
+        const response = await axios.get(
+          "https://in-telli-ventory.onrender.com/api/purchase-orders"
+        );
         setPurchases(response.data);
       } catch (error) {
-        setError('Failed to fetch products.');
+        setError("Failed to fetch products.");
       } finally {
         setLoading(false);
       }
@@ -34,7 +36,7 @@ const PurchaseDash = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Table className='mt-16 text-xl'>
+    <Table className="mt-16 text-xl">
       <TableCaption>Supplier List</TableCaption>
       <TableHeader>
         <TableRow>
@@ -48,7 +50,7 @@ const PurchaseDash = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {purchases.map(purchase => (
+        {purchases.map((purchase) => (
           <TableRow key={purchase.orderId}>
             <TableCell className="font-medium">{purchase.orderId}</TableCell>
             <TableCell>{purchase.product.productName}</TableCell>
@@ -57,7 +59,6 @@ const PurchaseDash = () => {
             <TableCell>{purchase.quantity}</TableCell>
             <TableCell>{purchase.total_cost}</TableCell>
             <TableCell>{purchase.status}</TableCell>
-            
           </TableRow>
         ))}
       </TableBody>

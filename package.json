@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "deep-chat-react": "^2.0.1",
     "framer-motion": "^11.3.9",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.414.0",
     "radix": "^0.0.0",
     "react": "^18.3.1",
