@@ -45,7 +45,6 @@ const authService = {
     });
     return response.data;
   },
-  
 };
 
 export { authService, axiosInstance };

@@ -45,6 +45,7 @@ export default function Predict() {
           ...item,
           minimum_demand: Math.max(item.minimum_demand, 0),
           maximum_demand: Math.max(item.maximum_demand, 0),
+          predicted_demand: Math.max(item.predicted_quantity, 0),
         }));
 
         setChartData(processedData);
@@ -78,9 +79,9 @@ export default function Predict() {
             <SelectValue placeholder="Select time range" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            <SelectItem value="90">Last 3 months</SelectItem>
-            <SelectItem value="30">Last 30 days</SelectItem>
-            <SelectItem value="7">Last 7 days</SelectItem>
+            <SelectItem value="90">Next 3 months</SelectItem>
+            <SelectItem value="30">Next 30 days</SelectItem>
+            <SelectItem value="7">Next 7 days</SelectItem>
           </SelectContent>
         </Select>
       </CardHeader>
@@ -120,6 +121,18 @@ export default function Predict() {
                     stopOpacity={0.1}
                   />
                 </linearGradient>
+                <linearGradient id="fillPredicted" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(270, 100%, 60%)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(270, 100%, 60%)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
@@ -139,20 +152,29 @@ export default function Predict() {
               <Legend />
               <Area
                 type="monotone"
-                dataKey="minimum_demand"
-                name="Minimum Demand"
-                stroke="hsl(var(--chart-1))"
-                fillOpacity={1}
-                fill="url(#fillMinimum)"
-                strokeWidth={2}
-              />
-              <Area
-                type="monotone"
                 dataKey="maximum_demand"
                 name="Maximum Demand"
                 stroke="hsl(var(--chart-2))"
                 fillOpacity={1}
                 fill="url(#fillMaximum)"
+                strokeWidth={2}
+              />
+              <Area
+                type="monotone"
+                dataKey="predicted_demand"
+                name="Predicted Demand"
+                stroke="hsl(var(--chart-4))"
+                fillOpacity={1}
+                fill="url(#fillPredicted)"
+                strokeWidth={2}
+              />
+              <Area
+                type="monotone"
+                dataKey="minimum_demand"
+                name="Minimum Demand"
+                stroke="hsl(var(--chart-1))"
+                fillOpacity={1}
+                fill="url(#fillMinimum)"
                 strokeWidth={2}
               />
             </AreaChart>

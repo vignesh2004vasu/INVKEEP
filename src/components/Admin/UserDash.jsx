@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { AddUserDialog } from "@/components/AddUserDialog";
+import AddUserDialog  from "@/components/AddUserDialog";
 import { axiosInstance } from "@/services/api";
 
 const UserDash = () => {
@@ -24,7 +24,7 @@ const UserDash = () => {
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get("/users");
-        console.log(response.data); 
+        console.log(response.data);
         setUsers(response.data);
       } catch (error) {
         setError("Failed to fetch users.");
@@ -40,11 +40,11 @@ const UserDash = () => {
     if (editingUser) {
       try {
         const response = await axiosInstance.put(
-          `/users/${editingUser.uid}`, // Use uid instead of id
+          `/users/${editingUser.uid}`, 
           user
         );
         setUsers(
-          users.map((u) => (u.uid === editingUser.uid ? response.data : u)) // Use uid instead of id
+          users.map((u) => (u.uid === editingUser.uid ? response.data : u)) 
         );
       } catch (error) {
         setError("Failed to edit user.");
@@ -93,9 +93,9 @@ const UserDash = () => {
         onSave={handleSaveUser}
         user={editingUser}
       />
-      <Button onClick={() => setIsDialogOpen(true)} variant="outline">
+      {/* <Button onClick={() => setIsDialogOpen(true)} variant="outline">
         Add User
-      </Button>
+      </Button> */}
       <Table className="mt-16 text-xl">
         <TableCaption>User List</TableCaption>
         <TableHeader>
@@ -111,9 +111,7 @@ const UserDash = () => {
           {users.map((user) => (
             <TableRow key={user.uid}>
               {" "}
-              
               <TableCell className="font-medium">{user.uid}</TableCell>{" "}
-             
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>
@@ -123,13 +121,6 @@ const UserDash = () => {
                   onClick={() => handleEdit(user)}
                 >
                   Edit
-                </Button>
-                <Button
-                  variant="outline"
-                  className="text-lg"
-                  onClick={() => handleDelete(user.uid)} // Use uid instead of id
-                >
-                  Delete
                 </Button>
               </TableCell>
             </TableRow>
